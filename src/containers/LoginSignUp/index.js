@@ -15,23 +15,23 @@ import {
 } from "react-native";
 import {
     Container,
-    Content,
-    Tabs,
-    Tab,
     Icon
 } from "native-base";
 import validator from 'validator'
-import OtpInputs from 'react-native-otp-inputs'
+// import OtpInputs from 'react-native-otp-inputs'
 import TopContainer from "./components/TopContainer";
 import BackArrowButton from "./components/BackArrowButton";
 import TabBar from "./components/TabBar";
 import ActiveTabBarIndicator from './components/ActiveTabBarIndicator'
 import SocialLogin from "./components/SocialLogin";
 import colors from '../../colors'
+import OTPInputView from '@twotalltotems/react-native-otp-input'
 
 
 const win = Dimensions.get('window')
 class LoginSignUp extends Component {
+
+    otpRef = React.createRef();
 
     componentWillMount() {
         this.bottomContainerHeightLogin = new Animated.Value(win.height * 0.45)
@@ -66,7 +66,8 @@ class LoginSignUp extends Component {
         signUpButtonDisabled: false,
         loginPointerEvents: 'none',
         forwardArrowDisabled: true,
-        mobileNumber: ''
+        mobileNumber: '',
+        otp: ''
     }
 
     keyboardWillShow = (event) => {
@@ -137,6 +138,14 @@ class LoginSignUp extends Component {
         }).start(() => {
             this.refs.textInputMobile.blur()
         })
+        Animated.timing(this.otpContainerHeight,
+            {
+                toValue: 0,
+                duration: 700
+            }
+        ).start(() => {
+            this.resetOTP();
+        })
     }
 
     shiftActiveIndicatorToSignUp = () => {
@@ -195,6 +204,10 @@ class LoginSignUp extends Component {
             );
         }
     }
+
+    resetOTP = () => {
+        this.setState({ otp: '' })
+    };
 
     handleOtpChange = (code) => {
         if (code.length == 4 && validator.isNumeric(code)) {
@@ -409,19 +422,22 @@ class LoginSignUp extends Component {
                                     marginTop: 15,
                                 }}
                             >
-                                <OtpInputs
-                                    handleChange={code => this.handleOtpChange(code)}
-                                    numberOfInputs={4}
-                                    focusedBorderColor={colors.primaryDark}
-                                    inputContainerStyles={{
+
+                                <OTPInputView
+                                    style={{ width: '100%', height: 60 }}
+                                    pinCount={4}
+                                    code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+                                    onCodeChanged={code => this.setState({ code: code })}
+                                    autoFocusOnLoad={false}
+                                    codeInputFieldStyle={{
                                         backgroundColor: '#FFFFFF',
-                                        width: 40,
-                                        height: 40,
+                                        width: 45,
+                                        height: 45,
                                         alignItems: 'center',
+                                        borderWidth: 0,
                                     }}
-                                    inputsContainerStyles={{
-                                        justifyContent: 'space-between'
-                                    }}
+                                    codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                                    onCodeFilled={code => this.handleOtpChange(code)}
                                 />
                             </Animated.View>
 

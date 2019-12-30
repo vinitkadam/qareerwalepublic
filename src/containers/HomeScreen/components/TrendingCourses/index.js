@@ -7,6 +7,8 @@ import {
     Image
 } from "react-native";
 import { Card } from "native-base";
+import CustomButton from "../../../../components/CustomButton";
+import colors from "../../../../colors";
 
 
 class TrendingCourses extends Component {
@@ -14,9 +16,23 @@ class TrendingCourses extends Component {
         return (
             <FlatList
                 data={this.props.data}
-                renderItem={({item}) =>
+                scrollEnabled={false}
+                keyExtractor={(item, index) => (item.title + index.toString()) }
+                renderItem={({item, index}) =>
 
-                <Card style={{ borderRadius: 8, marginTop: 10, elevation: 1 }}>
+                <CustomButton 
+                    style={{ 
+                        borderRadius: 8, 
+                        marginTop: 15, 
+                        elevation: 0, 
+                        marginBottom: this.props.data.length === index + 1 ? 15: 0, 
+                        borderWidth: 1, 
+                        borderColor: colors.lightSecondaryBorderColor 
+                        }}
+                    routeName={"courseInformation"}
+                    navigationProps={this.props.navigationProps}
+
+                >
                     <View 
                             style={{ 
                                 flexDirection: 'row',
@@ -46,7 +62,7 @@ class TrendingCourses extends Component {
                         </View>
 
 
-                </Card>
+                </CustomButton>
                 }
             />
 
