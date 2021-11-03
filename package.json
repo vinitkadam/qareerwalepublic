@@ -35,7 +35,7 @@
     "redux": "^4.0.4",
     "redux-persist": "5.10.0",
     "redux-thunk": "^2.3.0",
-    "validator": "^12.1.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0"
